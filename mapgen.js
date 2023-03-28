@@ -7,16 +7,31 @@ const map = [
   [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-  [1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+  [1, 1, 1, 1, 1, 9, 0, 0, 0, 0, 3, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
 
 const entities = [];
 
-const data = (x, y) => {
+const TYPE = {
+  CHARACTER: 0,
+  GROUND: 1,
+  OBSTACLE: 2,
+};
+
+const data = (x, y, type) => {
   return {
+    type: type,
     position: `${x * 64}.0;${y * 64}.0;0.0`,
     size: "64.0;64.0;64.0",
+  };
+};
+
+const logic = (canMove, canCollide, isFinish) => {
+  return {
+    canMove: canMove,
+    canCollide: canCollide,
+    isFinish: isFinish,
   };
 };
 
@@ -28,11 +43,8 @@ for (let y = 0; y < map.length; y++) {
           name: `wall_${x}_${y}`,
           "meta-entity": "ground_stone",
         },
-        data: data(x, y),
-        logic: {
-          canMove: "false",
-          canCollide: "true",
-        },
+        data: data(x, y, TYPE.GROUND),
+        logic: logic(false, true, false),
       });
     }
     if (map[y][x] === 2) {
@@ -41,11 +53,18 @@ for (let y = 0; y < map.length; y++) {
           name: `ground_${x}_${y}`,
           "meta-entity": "dirt",
         },
-        data: data(x, y),
-        logic: {
-          canMove: "false",
-          canCollide: "true",
+        data: data(x, y, TYPE.GROUND),
+        logic: logic(false, true, false),
+      });
+    }
+    if (map[y][x] === 3) {
+      entities.push({
+        _attributes: {
+          name: `finish_${x}_${y}`,
+          "meta-entity": "finish",
         },
+        data: data(x, y, TYPE.OBSTACLE),
+        logic: logic(false, true, true),
       });
     }
     if (map[y][x] === 9) {
@@ -54,11 +73,8 @@ for (let y = 0; y < map.length; y++) {
           name: `player`,
           "meta-entity": "player",
         },
-        data: data(x, y),
-        logic: {
-          canMove: "true",
-          canCollide: "false",
-        },
+        data: data(x, y, TYPE.CHARACTER),
+        logic: logic(true, true, false),
       });
     }
   }
