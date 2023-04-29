@@ -4,8 +4,8 @@ const convert = require("xml-js");
 const mapFileNames = ["map-small", "map-large"];
 
 const TYPE = {
-    CHARACTER: 0,
-    GROUND: 1,
+    PLAYER: 0,
+    WALL: 1,
     OBSTACLE: 2,
     FINISH: 3,
     MELON: 4,
@@ -38,19 +38,19 @@ mapFileNames.forEach((fileName) => {
                 entities.push({
                     _attributes: {
                         name: `wall_${x}_${y}`,
-                        "meta-entity": "ground_stone",
+                        "meta-entity": "wall",
                     },
-                    data: data(x, y, TYPE.GROUND),
+                    data: data(x, y, TYPE.WALL),
                     logic: logic(false, true, false),
                 });
             }
             if (map[y][x] === 2) {
                 entities.push({
                     _attributes: {
-                        name: `ground_${x}_${y}`,
-                        "meta-entity": "dirt",
+                        name: `obstacle_${x}_${y}`,
+                        "meta-entity": "obstacle",
                     },
-                    data: data(x, y, TYPE.GROUND),
+                    data: data(x, y, TYPE.OBSTACLE),
                     logic: logic(false, true, false),
                 });
             }
@@ -80,7 +80,7 @@ mapFileNames.forEach((fileName) => {
                         name: `player`,
                         "meta-entity": "player",
                     },
-                    data: data(x, y, TYPE.CHARACTER),
+                    data: data(x, y, TYPE.PLAYER),
                     logic: logic(true, true, false),
                 });
             }
