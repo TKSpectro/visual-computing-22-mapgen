@@ -15,6 +15,6 @@ const TYPE = {
 };
 ```
 
-There also is a [visual editor](https://codepen.io/tkspectro/pen/YzJxNvY).
+There also is a [visual editor](https://codepen.io/tkspectro/full/YzJxNvY).
 
 If you're finished painting a map just press F12 or open the developer console and then press to top most button. Then you can right click the log and press `copy object`. Now go to the map.js files and replace the complete array structure.
